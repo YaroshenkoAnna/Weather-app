@@ -30,7 +30,7 @@ function getCurrentDate(timezone){
     let currentTimeZoneOffsetInSec= now.getTimezoneOffset()*60 ;
     if(timezone){
       let milliseconds = now.getTime() + (timezone+currentTimeZoneOffsetInSec)*1000;
-      now = new Date(milliseconds);console.log(milliseconds);
+      now = new Date(milliseconds);
     }
     let date = now.getDate();
  
@@ -204,3 +204,19 @@ function convertTemperature(event){
         temperatureSpan.innerHTML = currentTemp;
     }
 }
+
+
+//-------------Make same height of card title-----------
+
+function makeSameHeight(){
+let city = document.querySelector('#city');
+let elem1 = city.closest('.card-header');
+let elem2 = document.querySelector('#forecast-header');
+
+ let necessaryHeight =  elem1.clientHeight;
+ elem2.style.height = necessaryHeight + 'px';
+}
+
+makeSameHeight();
+
+window.addEventListener('resize', makeSameHeight);
