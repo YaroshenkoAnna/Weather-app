@@ -93,19 +93,7 @@
                         width="120px"
                         id="clouds"
                     /></span>
-                    <span class="fs-1 fw-bold pe-2" id="cur-temp">+11 </span>
-                    <span id="celsius-fahrenheit"
-                      ><a
-                        href=""
-                        class="text-decoration-none text-dark"
-                        id="celsius"
-                        >°C</a
-                      >
-                      |
-                      <a href="" class="text-decoration-none" id="fahrenheit"
-                        >°F</a
-                      ></span
-                    >
+                    <span class="fs-1 fw-bold pe-2" id="cur-temp">+11°C </span>
                   </div>
                   <div class="fs-4">
                     <div class="d-flex justify-content-between">
@@ -122,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 weather-forecast">
               <div class="card">
                 <div class="card-header border-0 pb-4" id="forecast-header">
                   <h3 class="card-title">Weather for 5 days</h3>
@@ -138,93 +126,7 @@
                         <th>Pressure</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <span class="fw-bold">Monday</span
-                          ><span class="d-block">23.05.22</span>
-                        </td>
-                        <td>
-                          <img src="images/rain.svg" alt="clouds" /><span
-                            class="px-2"
-                            >+15°C</span
-                          ><span class="ps-2 text-primary text-opacity-50"
-                            >+9°C</span
-                          >
-                        </td>
-                        <td>4m/s, W</td>
-                        <td>67%</td>
-                        <td>745 mmHg</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span class="fw-bold">Tuesday</span
-                          ><span class="d-block">24.05.22</span>
-                        </td>
-                        <td>
-                          <img src="images/clear sky.svg" alt="clouds" /><span
-                            class="px-2"
-                            >+19°C</span
-                          ><span class="ps-2 text-primary text-opacity-50"
-                            >+11°C</span
-                          >
-                        </td>
-                        <td>2m/s, SW</td>
-                        <td>25%</td>
-                        <td>733 mmHg</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span class="fw-bold"> Wednesday</span
-                          ><span class="d-block">25.05.22</span>
-                        </td>
-                        <td>
-                          <img src="images/clear sky.svg" alt="clouds" /><span
-                            class="px-2"
-                            >+18°C</span
-                          ><span class="ps-2 text-primary text-opacity-50"
-                            >+11°C</span
-                          >
-                        </td>
-                        <td>3m/s, SE</td>
-                        <td>55%</td>
-                        <td>740 mmHg</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span class="fw-bold"> Thursday</span
-                          ><span class="d-block">26.05.22</span>
-                        </td>
-                        <td>
-                          <img src="images/clear sky.svg" alt="clouds" /><span
-                            class="px-2"
-                            >+16°C</span
-                          ><span class="ps-2 text-primary text-opacity-50"
-                            >+12°C</span
-                          >
-                        </td>
-                        <td>1m/s, E</td>
-                        <td>15%</td>
-                        <td>735 mmHg</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span class="fw-bold"> Friday</span
-                          ><span class="d-block">27.05.22</span>
-                        </td>
-                        <td>
-                          <img src="images/clear sky.svg" alt="clouds" /><span
-                            class="px-2"
-                            >+20°C</span
-                          ><span class="ps-2 text-primary text-opacity-50"
-                            >+13°C</span
-                          >
-                        </td>
-                        <td>1 m/s, N</td>
-                        <td>12%</td>
-                        <td>737 mmHg</td>
-                      </tr>
-                    </tbody>
+                    <tbody class="forecast-body"></tbody>
                   </table>
                 </div>
               </div>

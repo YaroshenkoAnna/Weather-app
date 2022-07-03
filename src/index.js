@@ -35,16 +35,8 @@ function getCurrentDate(timezone){
     let date = now.getDate();
  
     let ending = getEndingOfNumeral(date);
-    let days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
-    ];
-    let day = days[now.getDay()];
+    
+    let day = getDayName(now.getDay());
     let months = [
     "January",
     "February",
@@ -97,12 +89,14 @@ function definePosition(position) {
 function showCurrentLocation(response) {
   let currentLocation = document.querySelector("#cur-location");
  currentLocation.innerHTML = response.data.name;
- checkCity(response.data.name);
 }
 
 navigator.geolocation.getCurrentPosition(definePosition);
 let apiKey = "4f7ded0f20193e43384620ed8b03a130";
 
+//-------------DEFAULT CITY-----------
+ checkCity('Frankfurt Am Main');
+ 
 
 
 //-------------SEARCH ENGINE-----------
@@ -130,6 +124,10 @@ navigation.addEventListener('click', defineCity);
 
 
 function defineWeather(response) {
+  
+    let currentTemp;
+    let temperatureSpan = document.querySelector('#cur-temp');
+
     let humiditySpan = document.querySelector('#humidity');
     let pressureSpan = document.querySelector('#pressure');
     let windSpan = document.querySelector('#wind');
@@ -137,7 +135,7 @@ function defineWeather(response) {
     let city = document.querySelector('#city');
     city.innerHTML = response.data.name;
   
-  
+    getForecast(response.data.coord)
 
     currentTemp  = Math.round(response.data.main.temp);
     let currentHumidity = response.data.main.humidity;
@@ -146,21 +144,11 @@ function defineWeather(response) {
     let currentWindGust = Math.round(response.data.wind.gust);
     let currentWindDegree = response.data.wind.deg;
     // get direction of wind from degree
-    let highDegreeDirectionWind = [11.25, 33.75, 56.25, 78.75, 101.25, 123.75, 146.25, 168.75, 191.25, 213.75, 236.25, 258.75, 281.25, 303.75, 326.25, 348.75, 360]
-    let directionsWind =['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N']
-    let numberOfDirection = highDegreeDirectionWind.findIndex(elem => elem >= currentWindDegree);
-    let directionWind = directionsWind[numberOfDirection];
-
-    let currentWind;
-    if(currentWindGust && currentWindGust!==currentWind){
-        currentWind = `${currentWindSpeed}-${currentWindGust} m/s, ${directionWind}`
-    }else{
-        currentWind = `${currentWindSpeed} m/s, ${directionWind}`
-    }
+   let currentWind = getWind(currentWindSpeed, currentWindGust, currentWindDegree);
 
     let clouds = response.data.weather[0].icon;
     document.getElementById('clouds').src = `https://openweathermap.org/img/wn/${clouds}@2x.png`;
-    temperatureSpan.innerHTML = currentTemp ;
+    temperatureSpan.innerHTML = `${currentTemp}°C` ;
     humiditySpan.innerHTML = `${currentHumidity} %`;
     pressureSpan.innerHTML = `${currentPressure} hPa`;
     windSpan.innerHTML = currentWind;
@@ -170,41 +158,57 @@ function defineWeather(response) {
 }
 
 
+function getWind(windSpeed, windGust, windDegree){
+    let highDegreeDirectionWind = [11.25, 33.75, 56.25, 78.75, 101.25, 123.75, 146.25, 168.75, 191.25, 213.75, 236.25, 258.75, 281.25, 303.75, 326.25, 348.75, 360]
+    let directionsWind =['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N']
+    let numberOfDirection = highDegreeDirectionWind.findIndex(elem => elem >= windDegree);
+    let directionWind = directionsWind[numberOfDirection];
 
-
-
-
-//-------------CHANGE TEMPERATURE FROM C° TO F°------------
-let currentTemp;
-let temperatureSpan = document.querySelector('#cur-temp');
-
-
-let measureSpan = document.querySelector('#celsius-fahrenheit');
-measureSpan.addEventListener('click', convertTemperature);
-
-function convertTemperature(event){
-    event.preventDefault();
-    let celsius = document.querySelector('#celsius');
-    let fahrenheit = document.querySelector('#fahrenheit');
-    let currentMeasure = document.querySelector('#celsius-fahrenheit>.text-dark');
-   
-    
-    if (event.target == currentMeasure) {
-        return;
-    } else if(event.target == celsius||event.target == fahrenheit){
-        
-        currentMeasure.classList.remove("text-dark");
-        event.target.classList.add("text-dark");
-       
-        if (event.target == celsius) {
-            currentTemp = Math.round((currentTemp  -32) / 1.8);
-        } else {
-            currentTemp = Math.round(currentTemp * 1.8 + 32);
-        }
-        temperatureSpan.innerHTML = currentTemp;
+    let wind;
+    if(windGust && windGust!==wind){
+        wind = `${windSpeed}-${windGust} m/s, ${directionWind}`
+    }else{
+        wind = `${windSpeed} m/s, ${directionWind}`
     }
+
+    return wind;
+  } 
+
+
+  function getDayName(index){
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+    ];
+
+    return days[index];
 }
 
+
+function formatDay(timestamp) {
+  let time = new Date(timestamp * 1000);
+  let numberOfMonth =time.getMonth();
+  let month = numberOfMonth + 1;
+  if (month < 10){
+    month = '0' + month;
+  }
+  let date = time.getDate();
+  if(date < 10){
+    date = '0' + date;
+  }
+  return{
+    date: date,
+    day: getDayName(time.getDay()),
+    month: month,
+    year:time.getYear().toString().slice(1),
+  };
+
+}
 
 //-------------Make same height of card title-----------
 
@@ -220,3 +224,61 @@ let elem2 = document.querySelector('#forecast-header');
 makeSameHeight();
 
 window.addEventListener('resize', makeSameHeight);
+
+
+
+//-------------FORECAST-----------
+
+function getForecast(coordinates) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayForecast);
+}
+
+function displayForecast(response) {
+  let forecast = response.data.daily;
+  let forecastElement = document.querySelector(".forecast-body");
+  let forecastHTML='';
+  
+  
+  forecast.forEach(function (forecastDay, index) {
+    if(index < 5){
+      let clouds = forecastDay.weather[0].icon;
+      let currentDate=formatDay(forecastDay.dt);
+      let maxTemp = Math.round(forecastDay.temp.max);
+      if (maxTemp > 0){
+        maxTemp = '+' + maxTemp;
+      };
+      let minTemp = Math.round(forecastDay.temp.min);
+      if (minTemp > 0){
+        minTemp = '+' + minTemp;
+      };
+      let humidity = forecastDay.humidity; 
+      let pressure = forecastDay.pressure; 
+      let windSpeed = Math.round(forecastDay.wind_speed);
+      let windGust = Math.round(forecastDay.wind_gust);
+      let windDegree = forecastDay.wind_deg;
+      let wind  = getWind(windSpeed, windGust, windDegree);
+      forecastHTML =
+      forecastHTML +
+      `
+      <tr> 
+        <td>
+            <span class="fw-bold">${currentDate.day}</span><span class="d-block">${currentDate.date}.${currentDate.month}.${currentDate.year}</span>
+        </td>
+        <td>
+            <img src="https://openweathermap.org/img/wn/${clouds}@2x.png" alt="clouds" width="50px" /><span
+              class="px-2"
+            >${maxTemp}°C</span
+            ><span class="ps-2 text-primary text-opacity-50"
+            >${minTemp}°C</span>
+        </td>
+        <td>${wind}</td>
+        <td>${humidity}%</td>
+        <td>${pressure} hPa</td>
+      </tr>
+      `;
+
+      forecastElement.innerHTML = forecastHTML;
+    }
+  });
+}
